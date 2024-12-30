@@ -103,10 +103,13 @@ public class ClientFactory
     /// <returns>A list of default delegating handlers.</returns>
     public static IList<DelegatingHandler> CreateDefaultHandlers()
     {
-        var defaultHandlers = s_handlers.Value;
         var kiotaDefaultHandlers = KiotaClientFactory.CreateDefaultHandlers();
 
-        return kiotaDefaultHandlers.Concat(defaultHandlers).ToList();
+        return kiotaDefaultHandlers.Concat([
+            new APIVersionHandler(),
+            new UserAgentHandler(),
+            new RateLimitHandler(),
+        ]).ToList();
     }
 
     /// <summary>
