@@ -14,6 +14,7 @@ public class AppInstallationTokenProvider : IAccessTokenProvider
     private readonly string _sourceId;
     private readonly RSA _privateKey;
     private readonly string _installationId;
+    private string _jwt = string.Empty;
     private string _accessToken = string.Empty;
 
     private SecurityTokenDescriptor? _tokenDescriptor;
@@ -60,13 +61,18 @@ public class AppInstallationTokenProvider : IAccessTokenProvider
     public async Task<string> GetAuthorizationTokenAsync(Uri requestUri, Dictionary<string, object>? additionalAuthenticationContext = default, CancellationToken cancellationToken = default)
     {
         /// If the token is empty, about to be expired, or has expired - get a new one
-        if (string.IsNullOrEmpty(_accessToken) || (_tokenDescriptor != null && _tokenDescriptor.Expires < DateTime.UtcNow.AddMinutes(-1)))
+        if (string.IsNullOrEmpty(_accessToken) || string.IsNullOrEmpty(_jwt) || (_tokenDescriptor != null && _tokenDescriptor.Expires < DateTime.UtcNow.AddMinutes(-1)))
         {
             var baseUrl = requestUri.GetLeftPart(UriPartial.Authority);
 
             _tokenDescriptor = _gitHubAppTokenProvider.CreateTokenDescriptor(_privateKey, _sourceId, DateTime.UtcNow);
-            var jwt = _gitHubAppTokenProvider.CreateJsonWebToken(_tokenDescriptor);
-            _accessToken = await _gitHubAppTokenProvider.GetGitHubAccessTokenAsync(baseUrl, jwt, _installationId);
+            _jwt = _gitHubAppTokenProvider.CreateJsonWebToken(_tokenDescriptor);
+            _accessToken = await _gitHubAppTokenProvider.GetGitHubAccessTokenAsync(baseUrl, _jwt, _installationId);
+        }
+
+        if (requestUri.AbsolutePath.StartsWith("/app/hook/"))
+        {
+            return _jwt;
         }
 
         return _accessToken;

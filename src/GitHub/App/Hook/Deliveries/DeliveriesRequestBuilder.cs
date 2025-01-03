@@ -21,7 +21,7 @@ namespace GitHub.App.Hook.Deliveries
         /// <summary>Gets an item from the GitHub.app.hook.deliveries.item collection</summary>
         /// <param name="position">Unique identifier of the item</param>
         /// <returns>A <see cref="global::GitHub.App.Hook.Deliveries.Item.WithDelivery_ItemRequestBuilder"/></returns>
-        public global::GitHub.App.Hook.Deliveries.Item.WithDelivery_ItemRequestBuilder this[int position]
+        public global::GitHub.App.Hook.Deliveries.Item.WithDelivery_ItemRequestBuilder this[long position]
         {
             get
             {
@@ -68,6 +68,7 @@ namespace GitHub.App.Hook.Deliveries
             var errorMapping = new Dictionary<string, ParsableFactory<IParsable>>
             {
                 { "400", global::GitHub.Models.BasicError.CreateFromDiscriminatorValue },
+                { "401", global::GitHub.Models.BasicError.CreateFromDiscriminatorValue },
                 { "422", global::GitHub.Models.ValidationError.CreateFromDiscriminatorValue },
             };
             var collectionResult = await RequestAdapter.SendCollectionAsync<global::GitHub.Models.HookDeliveryItem>(requestInfo, global::GitHub.Models.HookDeliveryItem.CreateFromDiscriminatorValue, errorMapping, cancellationToken).ConfigureAwait(false);

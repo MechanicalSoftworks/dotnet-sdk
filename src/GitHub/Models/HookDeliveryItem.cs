@@ -44,7 +44,7 @@ namespace GitHub.Models
         public string Guid { get; set; }
 #endif
         /// <summary>Unique identifier of the webhook delivery.</summary>
-        public int? Id { get; set; }
+        public long? Id { get; set; }
         /// <summary>The id of the GitHub App installation associated with this event.</summary>
         public int? InstallationId { get; set; }
         /// <summary>Whether the webhook delivery is a redelivery.</summary>
@@ -93,7 +93,7 @@ namespace GitHub.Models
                 { "duration", n => { Duration = n.GetDoubleValue(); } },
                 { "event", n => { Event = n.GetStringValue(); } },
                 { "guid", n => { Guid = n.GetStringValue(); } },
-                { "id", n => { Id = n.GetIntValue(); } },
+                { "id", n => { Id = n.GetLongValue(); } },
                 { "installation_id", n => { InstallationId = n.GetIntValue(); } },
                 { "redelivery", n => { Redelivery = n.GetBoolValue(); } },
                 { "repository_id", n => { RepositoryId = n.GetIntValue(); } },
@@ -114,7 +114,7 @@ namespace GitHub.Models
             writer.WriteDoubleValue("duration", Duration);
             writer.WriteStringValue("event", Event);
             writer.WriteStringValue("guid", Guid);
-            writer.WriteIntValue("id", Id);
+            writer.WriteLongValue("id", Id);
             writer.WriteIntValue("installation_id", InstallationId);
             writer.WriteBoolValue("redelivery", Redelivery);
             writer.WriteIntValue("repository_id", RepositoryId);
