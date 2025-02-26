@@ -70,7 +70,7 @@ public class AppInstallationTokenProvider : IAccessTokenProvider
             _accessToken = await _gitHubAppTokenProvider.GetGitHubAccessTokenAsync(baseUrl, _jwt, _installationId);
         }
 
-        if (requestUri.AbsolutePath.StartsWith("/app/hook/"))
+        if (requestUri.AbsolutePath.StartsWith("/app/"))
         {
             return _jwt;
         }
